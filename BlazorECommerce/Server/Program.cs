@@ -1,3 +1,4 @@
+global using BlazorECommerce.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 
 namespace BlazorECommerce
