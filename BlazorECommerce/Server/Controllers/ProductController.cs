@@ -33,7 +33,7 @@ namespace BlazorECommerce.Server.Controllers
                 ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/1984first.jpg/320px-1984first.jpg",
                 Price = 6.99m
             }
-        };
+    };
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProduct()
