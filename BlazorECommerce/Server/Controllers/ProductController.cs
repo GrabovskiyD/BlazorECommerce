@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorECommerce.Server.Controllers
@@ -7,16 +8,15 @@ namespace BlazorECommerce.Server.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly DataContext _dataContext;
-        public ProductController(DataContext dataContext)
+        private readonly IProductService _productService;
+        public ProductController(IProductService productService)
         {
-            _dataContext = dataContext;
+            _productService = productService;
         }
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProduct()
         {
-            var products = await _dataContext.Products.ToListAsync();
-            return Ok(products);
+            return Ok(await _productService.GetProductsAsync());
         }
     }
 }
