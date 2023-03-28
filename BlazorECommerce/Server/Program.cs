@@ -1,6 +1,6 @@
 global using BlazorECommerce.Shared;
 global using Microsoft.EntityFrameworkCore;
-using BlazorECommerce.Server.Data;
+global using BlazorECommerce.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 
 namespace BlazorECommerce
