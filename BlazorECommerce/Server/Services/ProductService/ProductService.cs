@@ -1,4 +1,6 @@
-﻿namespace BlazorECommerce.Server.Services.ProductService
+﻿using System.Net;
+
+namespace BlazorECommerce.Server.Services.ProductService
 {
     public class ProductService : IProductService
     {
@@ -31,6 +33,17 @@
             var response = new ServiceResponse<List<Product>>()
             {
                 Data = await _dataContext.Products.ToListAsync(),
+                Success = true
+            };
+            return response;
+        }
+
+        public async Task<ServiceResponse<List<Product>>> GetProductsByCategoryAsync(string categoryUrl)
+        {
+            var response = new ServiceResponse<List<Product>>()
+            {
+                Data = await _dataContext.Products
+                .Where(p => p.Category.Url.ToLower().Equals(categoryUrl)).ToListAsync(),
                 Success = true
             };
             return response;
