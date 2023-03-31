@@ -10,7 +10,7 @@
             _httpClient = httpClient;
         }
         public List<Product> Products { get; set; } = new List<Product>();
-
+        public string Message { get; set; } = "Loading Products...";
         public async Task<ServiceResponse<Product>> GetProduct(int productId)
         {
             var result = await _httpClient.GetFromJsonAsync<ServiceResponse<Product>>($"api/product/{productId}");
@@ -29,6 +29,26 @@
             }
 
             OnProductChanged?.Invoke();
+        }
+
+        public async Task SearchProducts(string searchText)
+        {
+            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/search/{searchText}");
+            if (result is not null && result.Data is not null)
+            {
+                Products = result.Data;
+            }
+            if (Products.Count == 0)
+            {
+                Message = "No products found";
+            }
+            OnProductChanged?.Invoke();
+        }
+
+        public async Task<List<string>> GetProductSearchSearchSuggestions(string searchText)
+        {
+            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<string>>>($"api/product/searchsuggestions/{searchText}");
+            return result.Data;
         }
     }
 }
