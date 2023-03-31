@@ -56,5 +56,59 @@ namespace BlazorECommerce.Server.Services.ProductService
             };
             return response;
         }
+
+        public async Task<ServiceResponse<List<Product>>> SearchProductsAsync(string searchText)
+        {
+            var response = new ServiceResponse<List<Product>>
+            {
+                Data = await FindProductsBySearchText(searchText)
+            };
+            if (response.Data is not null)
+            {
+                response.Success = true;
+            }
+            return response;
+        }
+
+        private async Task<List<Product>> FindProductsBySearchText(string searchText)
+        {
+            return await _dataContext.Products.Where(p => p.Title.ToLower().Contains(searchText.ToLower())
+                            || p.Description.ToLower().Contains(searchText.ToLower()))
+                            .Include(p => p.Variants)
+                            .ToListAsync();
+        }
+
+        public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestionsAsync(string searchText)
+        {
+            var products = await FindProductsBySearchText(searchText);
+
+            List<string> result = new List<string>();
+            
+            foreach(var product in products)
+            {
+                if(product.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Add(product.Title);
+                }
+
+                if(product.Description is not null)
+                {
+                    var punctuation = product.Description.Where(char.IsPunctuation)
+                        .Distinct().ToArray();
+                    var words = product.Description.Split()
+                        .Select(s => s.Trim(punctuation));
+                    foreach(string word in words)
+                    {
+                        if(word.Contains(searchText, StringComparison.OrdinalIgnoreCase) &&
+                            !result.Contains(word))
+                        {
+                            result.Add(word);
+                        }
+                    }
+                }
+            }
+
+            return new ServiceResponse<List<string>> { Data = result };
+        }
     }
 }
