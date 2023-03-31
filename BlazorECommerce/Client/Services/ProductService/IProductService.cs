@@ -11,6 +11,6 @@
         Task<ServiceResponse<Product>> GetProduct(int productId);
 
         Task SearchProducts(string searchText);
-        Task<List<string>> GetProductSearchSearchSuggestions(string searchText);
+        Task<List<string>> GetProductsSearchSuggestions(string searchText);
     }
 }
