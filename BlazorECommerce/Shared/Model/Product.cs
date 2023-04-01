@@ -1,4 +1,4 @@
-﻿namespace BlazorECommerce.Shared
+﻿namespace BlazorECommerce.Shared.Model
 {
     public class Product
     {

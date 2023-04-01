@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorECommerce.Shared
+namespace BlazorECommerce.Shared.Model
 {
     public class ServiceResponse<T>
     {

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace BlazorECommerce.Server.Controllers
+﻿namespace BlazorECommerce.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -30,10 +28,10 @@ namespace BlazorECommerce.Server.Controllers
             return Ok(await _productService.GetProductsByCategoryAsync(categoryUrl));
         }
 
-        [HttpGet("search/{searchText}")]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> SearchProducts(string searchText)
+        [HttpGet("search/{searchText}/{page}")]
+        public async Task<ActionResult<ServiceResponse<ProductSearchResultDTO>>> SearchProducts(string searchText, int page = 1)
         {
-            return Ok(await _productService.SearchProductsAsync(searchText));
+            return Ok(await _productService.SearchProductsAsync(searchText, page));
         }
 
         [HttpGet("searchSuggestions/{searchText}")]

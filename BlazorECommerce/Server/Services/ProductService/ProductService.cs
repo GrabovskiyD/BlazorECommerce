@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-
-namespace BlazorECommerce.Server.Services.ProductService
+﻿namespace BlazorECommerce.Server.Services.ProductService
 {
     public class ProductService : IProductService
     {
@@ -57,11 +54,25 @@ namespace BlazorECommerce.Server.Services.ProductService
             return response;
         }
 
-        public async Task<ServiceResponse<List<Product>>> SearchProductsAsync(string searchText)
+        public async Task<ServiceResponse<ProductSearchResultDTO>> SearchProductsAsync(string searchText, int page)
         {
-            var response = new ServiceResponse<List<Product>>
+            var pageResults = 2f;
+            var pageCount = Math.Ceiling((await FindProductsBySearchText(searchText)).Count / pageResults );
+            var products = await _dataContext.Products.Where(p => p.Title.ToLower().Contains(searchText.ToLower())
+                            || p.Description.ToLower().Contains(searchText.ToLower()))
+                            .Include(p => p.Variants)
+                            .Skip((page - 1) * (int)pageResults)
+                            .Take((int)pageResults)
+                            .ToListAsync();
+
+            var response = new ServiceResponse<ProductSearchResultDTO>
             {
-                Data = await FindProductsBySearchText(searchText)
+                Data = new ProductSearchResultDTO
+                {
+                    Products = products,
+                    CurrentPage = page,
+                    Pages = (int)pageCount
+                }
             };
             if (response.Data is not null)
             {
