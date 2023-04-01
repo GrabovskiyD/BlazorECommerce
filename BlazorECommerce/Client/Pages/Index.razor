@@ -5,13 +5,20 @@
 
 <PageTitle>My Shop</PageTitle>
 
-<ProductList/>
+@if(SearchText is null && CategoryUrl is null)
+{
+    <FeaturedProducts/>
+}
+else
+{
+    <ProductList />
+}
 
 @code{
     [Parameter]
     public string? CategoryUrl { get; set; }
     [Parameter]
-    public string SearchText {get; set;}
+    public string? SearchText {get; set;}
 
     protected override async Task OnParametersSetAsync()
     {
