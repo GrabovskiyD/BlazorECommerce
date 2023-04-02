@@ -5,6 +5,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using BlazorECommerce.Server.Data;
 global using BlazorECommerce.Server.Services.ProductService;
 global using BlazorECommerce.Server.Services.CategoryService;
+global using BlazorECommerce.Server.Services.CartService;
 
 namespace BlazorECommerce
 {
@@ -26,6 +27,7 @@ namespace BlazorECommerce
 
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ICartService, CartService>();
 
             var app = builder.Build();
 
