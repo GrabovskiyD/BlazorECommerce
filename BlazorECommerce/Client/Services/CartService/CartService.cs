@@ -24,7 +24,17 @@ namespace BlazorECommerce.Client.Services.CartService
             {
                 cart = new List<CartItem>();
             }
-            cart.Add(cartItem);
+
+            var sameItem = cart.Find(x => x.ProductId == cartItem.ProductId && 
+            x.ProductTypeId == cartItem.ProductTypeId);
+            if(sameItem is null)
+            {
+                cart.Add(cartItem);
+            }
+            else
+            {
+                sameItem.Quantity += cartItem.Quantity;
+            }
 
             await _localStorage.SetItemAsync("cart", cart);
             OnChange?.Invoke();
@@ -49,6 +59,41 @@ namespace BlazorECommerce.Client.Services.CartService
                 await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>();
             return cartProducts.Data;
 
+        }
+
+        public async Task RemoveProductFromCartAsync(int productId, int productTypeId)
+        {
+            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+            if(cart is null)
+            {
+                return;
+            }
+
+            var cartItem = cart.Find(x => x.ProductId == productId
+                && x.ProductTypeId == productTypeId);
+            if(cartItem is not null)
+            {
+                cart.Remove(cartItem);
+                await _localStorage.SetItemAsync("cart", cart);
+                OnChange?.Invoke();
+            }
+        }
+
+        public async Task UpdateQuantityAsync(CartProductResponseDTO product)
+        {
+            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+            if (cart is null)
+            {
+                return;
+            }
+
+            var cartItem = cart.Find(x => x.ProductId == product.ProductId
+                && x.ProductTypeId == product.ProductTypeId);
+            if (cartItem is not null)
+            {
+                cartItem.Quantity = product.Quantity;
+                await _localStorage.SetItemAsync("cart", cart);
+            }
         }
     }
 }
