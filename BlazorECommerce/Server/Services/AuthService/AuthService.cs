@@ -32,7 +32,7 @@ namespace BlazorECommerce.Server.Services.AuthService
             {
                 Data = user.Id,
                 Success = true,
-                Message = $"Created the User with id={user.Id}"
+                Message = "Registration successful!"
             };
         }
 
