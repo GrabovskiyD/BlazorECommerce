@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BlazorECommerce.Server.Controllers
 {
@@ -17,7 +19,7 @@ namespace BlazorECommerce.Server.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> RegisterAsync(UserRegister request)
         {
-            var response = await _authService.Register(new User
+            var response = await _authService.RegisterAsync(new User
             {
                 Email = request.Email
             },
@@ -31,10 +33,23 @@ namespace BlazorECommerce.Server.Controllers
             return Ok(response);
         }
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLogin request)
+        public async Task<ActionResult<ServiceResponse<string>>> LoginAsync(UserLogin request)
         {
-            var response = await _authService.Login(request.Email, request.Password);
+            var response = await _authService.LoginAsync(request.Email, request.Password);
             
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        [HttpPost("change-password"), Authorize]
+        public async Task<ActionResult<ServiceResponse<bool>>> ChangePasswordAsync([FromBody] string newPassword)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = await _authService.ChangePasswordAsync(int.Parse(userId), newPassword);
+
             if (!response.Success)
             {
                 return BadRequest(response);

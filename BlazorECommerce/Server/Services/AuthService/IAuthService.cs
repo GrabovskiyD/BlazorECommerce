@@ -2,8 +2,9 @@
 {
     public interface IAuthService
     {
-        Task<ServiceResponse<int>> Register(User user, string password);
-        Task<bool> UserExists(string email);
-        Task<ServiceResponse<string>> Login(string email, string password);
+        Task<ServiceResponse<int>> RegisterAsync(User user, string password);
+        Task<bool> UserExistsAsync(string email);
+        Task<ServiceResponse<string>> LoginAsync(string email, string password);
+        Task<ServiceResponse<bool>> ChangePasswordAsync(int userId, string newPassword);
     }
 }

@@ -8,7 +8,7 @@
 
 <h3>Login</h3>
 
-<EditForm Model="user" OnValidSubmit="HandleLogin">
+<EditForm Model="user" OnValidSubmit="HandleLoginAsync">
     <DataAnnotationsValidator />
     <div class="mb-3">
         <label for="email">Email</label>
@@ -42,7 +42,7 @@
         }
 }
 
-    private async Task HandleLogin()
+    private async Task HandleLoginAsync()
     {
         var result = await AuthService.LoginAsync(user);
         if (result.Success)

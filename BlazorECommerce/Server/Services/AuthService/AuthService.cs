@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -16,7 +17,7 @@ namespace BlazorECommerce.Server.Services.AuthService
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public async Task<ServiceResponse<string>> LoginAsync(string email, string password)
         {
             var response = new ServiceResponse<string>();
             var user = await _dataContext.Users
@@ -41,9 +42,9 @@ namespace BlazorECommerce.Server.Services.AuthService
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<int>> RegisterAsync(User user, string password)
         {
-            if(await UserExists(user.Email))
+            if(await UserExistsAsync(user.Email))
             {
                 return new ServiceResponse<int>
                 {
@@ -67,7 +68,7 @@ namespace BlazorECommerce.Server.Services.AuthService
             };
         }
 
-        public async Task<bool> UserExists(string email)
+        public async Task<bool> UserExistsAsync(string email)
         {
             if(await _dataContext.Users.AnyAsync(u => u.Email.ToLower().Equals(email.ToLower())))
             {
@@ -113,6 +114,28 @@ namespace BlazorECommerce.Server.Services.AuthService
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+
+        public async Task<ServiceResponse<bool>> ChangePasswordAsync(int userId, string newPassword)
+        {
+            var user = await _dataContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+
+            CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            await _dataContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool> { Data = true, Message = "Password has been changed." };
         }
     }
 }

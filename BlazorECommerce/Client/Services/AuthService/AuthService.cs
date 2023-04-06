@@ -1,4 +1,6 @@
-﻿namespace BlazorECommerce.Client.Services.AuthService
+﻿using static System.Net.WebRequestMethods;
+
+namespace BlazorECommerce.Client.Services.AuthService
 {
     public class AuthService : IAuthService
     {
@@ -7,6 +9,12 @@
         public AuthService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<ServiceResponse<bool>> ChangePasswordAsync(UserChangePassword request)
+        {
+            var result = await _httpClient.PostAsJsonAsync("api/auth/change-password", request.Password);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
         }
 
         public async Task<ServiceResponse<string>> LoginAsync(UserLogin request)
