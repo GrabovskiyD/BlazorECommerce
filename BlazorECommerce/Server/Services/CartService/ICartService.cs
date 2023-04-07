@@ -5,5 +5,6 @@
         Task<ServiceResponse<List<CartProductResponseDTO>>> GetCartProductsAsync(List<CartItem> cartItems);
         Task<ServiceResponse<List<CartProductResponseDTO>>> StoreCartItemsAsync(List<CartItem> cartItems);
         Task<ServiceResponse<int>> GetCartItemsCountAsync();
+        Task<ServiceResponse<List<CartProductResponseDTO>>> GetDbCartProductsAsync();
     }
 }
