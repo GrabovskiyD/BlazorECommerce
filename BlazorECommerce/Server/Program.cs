@@ -45,6 +45,7 @@ namespace BlazorECommerce
                         ValidateAudience = false
                     };
                 });
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
