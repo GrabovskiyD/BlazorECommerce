@@ -91,5 +91,6 @@ else
                 ProductTypeId = productVariant.ProductTypeId
             };
         await CartService.AddToCartAsync(cartItem);
+        await CartService.GetCartItemsCountAsync();
     }
 }

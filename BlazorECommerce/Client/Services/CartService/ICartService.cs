@@ -11,5 +11,6 @@ namespace BlazorECommerce.Client.Services.CartService
         Task RemoveProductFromCartAsync(int productId, int productTypeId);
         Task UpdateQuantityAsync(CartProductResponseDTO product);
         Task StoreCartItemsAsync(bool emptyLocalCart);
+        Task GetCartItemsCountAsync();
     }
 }
