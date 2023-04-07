@@ -2,6 +2,7 @@
 
 using BlazorECommerce.Shared.Model;
 using BlazorECommerce.Shared.Model.DTOs;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorECommerce.Client.Services.CartService
 {
@@ -9,16 +10,28 @@ namespace BlazorECommerce.Client.Services.CartService
     {
         private readonly ILocalStorageService _localStorage;
         private readonly HttpClient _httpClient;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public CartService(ILocalStorageService localStorage, HttpClient httpClient)
+        public CartService(ILocalStorageService localStorage, 
+            HttpClient httpClient, 
+            AuthenticationStateProvider authenticationStateProvider)
         {
             _localStorage = localStorage;
             _httpClient = httpClient;
+            _authenticationStateProvider = authenticationStateProvider;
         }
         public event Action OnChange;
 
         public async Task AddToCartAsync(CartItem cartItem)
         {
+            if((await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated)
+            {
+                Console.WriteLine("user is authenticated");
+            }
+            else
+            {
+                Console.WriteLine("user is NOT authencticated");
+            }
             var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
             if(cart is null)
             {
@@ -76,6 +89,21 @@ namespace BlazorECommerce.Client.Services.CartService
                 cart.Remove(cartItem);
                 await _localStorage.SetItemAsync("cart", cart);
                 OnChange?.Invoke();
+            }
+        }
+
+        public async Task StoreCartItemsAsync(bool emptyLocalCart = false)
+        {
+            var localCart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+            if(localCart is null)
+            {
+                return;
+            }
+            await _httpClient.PostAsJsonAsync("api/cart", localCart);
+
+            if (emptyLocalCart)
+            {
+                await _localStorage.RemoveItemAsync("cart");
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @inject IAuthService AuthService
 @inject ILocalStorageService LocalStorage
+@inject ICartService CartService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -40,7 +41,7 @@
         {
             returnUrl = url;
         }
-}
+    }
 
     private async Task HandleLoginAsync()
     {
@@ -50,6 +51,7 @@
             errorMessage = string.Empty;
             await LocalStorage.SetItemAsync("authToken", result.Data);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            await CartService.StoreCartItemsAsync(true);
             NavigationManager.NavigateTo(returnUrl);
         }
         else
