@@ -27,30 +27,28 @@ namespace BlazorECommerce.Client.Services.CartService
         {
             if (await IsUserAuthenticated())
             {
-                Console.WriteLine("user is authenticated");
+                await _httpClient.PostAsJsonAsync("api/cart/add", cartItem);
             }
             else
             {
-                Console.WriteLine("user is NOT authencticated");
-            }
-            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
-            if (cart is null)
-            {
-                cart = new List<CartItem>();
-            }
+                var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+                if (cart is null)
+                {
+                    cart = new List<CartItem>();
+                }
 
-            var sameItem = cart.Find(x => x.ProductId == cartItem.ProductId &&
-            x.ProductTypeId == cartItem.ProductTypeId);
-            if (sameItem is null)
-            {
-                cart.Add(cartItem);
-            }
-            else
-            {
-                sameItem.Quantity += cartItem.Quantity;
-            }
-
-            await _localStorage.SetItemAsync("cart", cart);
+                var sameItem = cart.Find(x => x.ProductId == cartItem.ProductId &&
+                    x.ProductTypeId == cartItem.ProductTypeId);
+                if (sameItem is null)
+                {
+                    cart.Add(cartItem);
+                }
+                else
+                {
+                    sameItem.Quantity += cartItem.Quantity;
+                }
+                await _localStorage.SetItemAsync("cart", cart);
+            }           
             await GetCartItemsCountAsync();
         }
 

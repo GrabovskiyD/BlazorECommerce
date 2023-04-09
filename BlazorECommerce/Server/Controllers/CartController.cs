@@ -26,6 +26,12 @@ namespace BlazorECommerce.Server.Controllers
             return Ok(await _cartService.StoreCartItemsAsync(cartItems));
         }
 
+        [HttpPost("add")]
+        public async Task<ActionResult<ServiceResponse<bool>>> AddItemToCartAsync(CartItem cartItem)
+        {
+            return Ok(await _cartService.AddItemToCartAsync(cartItem));
+        }
+
         [HttpGet("count")]
         public async Task<ActionResult<ServiceResponse<int>>> GetCartItemsCountAsync()
         {
