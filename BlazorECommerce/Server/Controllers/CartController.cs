@@ -32,6 +32,12 @@ namespace BlazorECommerce.Server.Controllers
             return Ok(await _cartService.AddItemToCartAsync(cartItem));
         }
 
+        [HttpPut("update-quantity")]
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateItemsQuantityAsync(CartItem cartItem)
+        {
+            return Ok(await _cartService.UpdateItemsQuantityAsync(cartItem));
+        }
+
         [HttpGet("count")]
         public async Task<ActionResult<ServiceResponse<int>>> GetCartItemsCountAsync()
         {

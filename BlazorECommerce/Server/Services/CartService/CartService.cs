@@ -92,7 +92,7 @@ namespace BlazorECommerce.Server.Services.CartService
 
             var sameItem = await _dataContext.CartItems
                 .FirstOrDefaultAsync(ci => ci.ProductId == cartItem.ProductId &&
-                ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == cartItem.UserId);
+                ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == GetUserId());
 
             if(sameItem is null)
             {
@@ -108,6 +108,31 @@ namespace BlazorECommerce.Server.Services.CartService
             {
                 Data = true,
                 Success = true
+            };
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateItemsQuantityAsync(CartItem cartItem)
+        {
+            var dbCartItem = await _dataContext.CartItems
+                .FirstOrDefaultAsync(ci => ci.ProductId == cartItem.ProductId &&
+                ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == GetUserId());
+            if(dbCartItem is null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Cart item does not exist"
+                };
+            }
+
+            dbCartItem.Quantity = cartItem.Quantity;
+            await _dataContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool> 
+            {
+                Data = true, 
+                Success = true 
             };
         }
     }
