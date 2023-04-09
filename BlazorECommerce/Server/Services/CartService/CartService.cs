@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using BlazorECommerce.Shared.Model;
+using System.Security.Claims;
 
 namespace BlazorECommerce.Server.Services.CartService
 {
@@ -72,7 +73,7 @@ namespace BlazorECommerce.Server.Services.CartService
 
         public async Task<ServiceResponse<int>> GetCartItemsCountAsync()
         {
-            var count = (await _dataContext.CartItems.Where(ci => ci.UserId == GetUserId()).ToListAsync()).Count();
+            var count = (await _dataContext.CartItems.Where(ci => ci.UserId == GetUserId()).ToListAsync()).Sum(ci => ci.Quantity);
             return new ServiceResponse<int>
             {
                 Data = count,
@@ -92,7 +93,7 @@ namespace BlazorECommerce.Server.Services.CartService
 
             var sameItem = await _dataContext.CartItems
                 .FirstOrDefaultAsync(ci => ci.ProductId == cartItem.ProductId &&
-                ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == GetUserId());
+                ci.ProductTypeId == cartItem.ProductTypeId && ci.UserId == cartItem.UserId);
 
             if(sameItem is null)
             {
@@ -131,6 +132,30 @@ namespace BlazorECommerce.Server.Services.CartService
 
             return new ServiceResponse<bool> 
             {
+                Data = true, 
+                Success = true 
+            };
+        }
+
+        public async Task<ServiceResponse<bool>> RemoveItemFromCartAsync(int productId, int productTypeId)
+        {
+            var dbCartItem = await _dataContext.CartItems
+                .FirstOrDefaultAsync(ci => ci.ProductId == productId &&
+                ci.ProductTypeId == productTypeId && ci.UserId == GetUserId());
+            if (dbCartItem is null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Cart item does not exist"
+                };
+            }
+
+            _dataContext.CartItems.Remove(dbCartItem);
+            await _dataContext.SaveChangesAsync();
+            return new ServiceResponse<bool> 
+            { 
                 Data = true, 
                 Success = true 
             };
