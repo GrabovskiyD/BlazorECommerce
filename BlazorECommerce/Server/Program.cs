@@ -9,6 +9,7 @@ global using BlazorECommerce.Server.Services.CartService;
 global using BlazorECommerce.Server.Services.AuthService;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.IdentityModel.Tokens;
+global using BlazorECommerce.Server.Services.OrderService;
 
 namespace BlazorECommerce
 {
@@ -32,6 +33,7 @@ namespace BlazorECommerce
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
