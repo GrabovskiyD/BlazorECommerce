@@ -6,11 +6,11 @@ namespace BlazorECommerce.Server.Services.OrderService
     {
         private readonly DataContext _dataContext;
         private readonly ICartService _cartService;
-        private readonly HttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public OrderService(DataContext dataContext, 
             ICartService cartService, 
-            HttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor)
         {
             _dataContext = dataContext;
             _cartService = cartService;
