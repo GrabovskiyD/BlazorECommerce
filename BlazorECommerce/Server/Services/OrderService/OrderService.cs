@@ -27,13 +27,13 @@
             orders.ForEach(o => orderResponse.Add(new OrderOverviewResponse
             {
                 Id = o.Id,
-                OrderDate = o.OrderDate,
+                OrderDate = o.OrderDate.ToString("dd.MM.yyyy HH:mm"),
                 TotalPrice = o.TotalPrice,
                 Product = o.OrderItems.Count > 1 ?
                     $"{o.OrderItems.First().Product.Title} and " +
                     $"{o.OrderItems.Count - 1} more..." :
                     o.OrderItems.First().Product.Title,
-                ProductImageUrl = o.OrderItems.First().Product.ImageUrl
+                    ProductImageUrl = o.OrderItems.First().Product.ImageUrl
             }));
 
             var response = new ServiceResponse<List<OrderOverviewResponse>> 

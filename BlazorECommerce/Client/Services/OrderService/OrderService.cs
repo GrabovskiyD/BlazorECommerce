@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorECommerce.Shared.Model.DTOs;
+using Microsoft.AspNetCore.Components;
 
 namespace BlazorECommerce.Client.Services.OrderService
 {
@@ -34,5 +35,10 @@ namespace BlazorECommerce.Client.Services.OrderService
             }
         }
 
+        public async Task<List<OrderOverviewResponse>> GetOrdersAsync()
+        {
+            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<OrderOverviewResponse>>>("api/order");
+            return result.Data;
+        }
     }
 }
