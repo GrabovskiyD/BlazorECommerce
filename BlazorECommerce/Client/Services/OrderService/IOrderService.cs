@@ -6,5 +6,6 @@ namespace BlazorECommerce.Client.Services.OrderService
     {
         Task PlaceOrderAsync();
         Task<List<OrderOverviewResponse>> GetOrdersAsync();
+        Task<OrderDetailsResponse> GetOrderDetailsAsync(int orderId);
     }
 }
