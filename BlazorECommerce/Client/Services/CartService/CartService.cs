@@ -20,7 +20,7 @@ namespace BlazorECommerce.Client.Services.CartService
 
         public async Task AddToCartAsync(CartItem cartItem)
         {
-            if (await IsUserAuthenticated())
+            if (await _authService.IsUserAuthenticatedAsync())
             {
                 await _httpClient.PostAsJsonAsync("api/cart/add", cartItem);
             }

@@ -22,7 +22,7 @@ namespace BlazorECommerce.Client.Services.OrderService
         {
             if(await _authService.IsUserAuthenticatedAsync())
             {
-                var result = await _httpClient.PostAsync("api/payment", null);
+                var result = await _httpClient.PostAsync("api/payment/checkout", null);
                 var url = await result.Content.ReadAsStringAsync();
                 return url;
             }

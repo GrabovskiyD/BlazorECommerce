@@ -22,8 +22,8 @@ namespace BlazorECommerce.Server.Services.PaymentService
         public async Task<Session> CreateCheckoutSessionAsync()
         {
             var products = (await _cartService.GetDbCartProductsAsync()).Data;
-            var lineItem = new List<SessionLineItemOptions>();
-            products.ForEach(product => lineItem.Add(new SessionLineItemOptions
+            var lineItems = new List<SessionLineItemOptions>();
+            products.ForEach(product => lineItems.Add(new SessionLineItemOptions
             {
                 PriceData = new SessionLineItemPriceDataOptions
                 {
@@ -47,7 +47,7 @@ namespace BlazorECommerce.Server.Services.PaymentService
                 {
                     "card"
                 },
-                LineItems = lineItem,
+                LineItems = lineItems,
                 Mode = "payment",
                 SuccessUrl = "https://localhost:7190/order-success",
                 CancelUrl = "https://localhost:7190/cart"
