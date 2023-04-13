@@ -18,15 +18,17 @@ namespace BlazorECommerce.Client.Services.OrderService
             _authService = authService;
         }
 
-        public async Task PlaceOrderAsync()
+        public async Task<string> PlaceOrderAsync()
         {
             if(await _authService.IsUserAuthenticatedAsync())
             {
-                await _httpClient.PostAsync("api/order", null);
+                var result = await _httpClient.PostAsync("api/payment", null);
+                var url = await result.Content.ReadAsStringAsync();
+                return url;
             }
             else
             {
-                _navigationManager.NavigateTo("login");
+                return "login";
             }
         }
 
