@@ -77,10 +77,14 @@
             };
         }
 
-        public async Task<ServiceResponse<List<CartProductResponseDTO>>> GetDbCartProductsAsync()
+        public async Task<ServiceResponse<List<CartProductResponseDTO>>> GetDbCartProductsAsync(int? userId = null)
         {
+            if(userId is null)
+            {
+                userId = _authService.GetUserId();
+            }
             return await GetCartProductsAsync(await _dataContext.CartItems
-                .Where(cartItem => cartItem.UserId == _authService.GetUserId()).ToListAsync());
+                .Where(cartItem => cartItem.UserId == userId).ToListAsync());
         }
 
         public async Task<ServiceResponse<bool>> AddItemToCartAsync(CartItem cartItem)

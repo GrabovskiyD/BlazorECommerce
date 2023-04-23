@@ -23,7 +23,8 @@ namespace BlazorECommerce
             // Add services to the container.
             builder.Services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
+                //options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL"));
             });
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
