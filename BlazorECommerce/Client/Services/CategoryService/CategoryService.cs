@@ -9,7 +9,7 @@
             _httpClient = httpClient;
         }
         public List<Category> Categories { get; set; } = new List<Category>();
-        public List<Category> AdminCategories { get;  set; }
+        public List<Category> AdminCategories { get; set; } = new List<Category>();
 
         public event Action OnChange;
 
@@ -46,7 +46,7 @@
             var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Category>>>("api/category/admin");
             if (result is not null && result.Data is not null)
             {
-                Categories = result.Data;
+                AdminCategories = result.Data;
             }
         }
 
