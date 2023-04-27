@@ -12,6 +12,7 @@ global using Microsoft.IdentityModel.Tokens;
 global using BlazorECommerce.Server.Services.OrderService;
 global using BlazorECommerce.Server.Services.PaymentService;
 global using BlazorECommerce.Server.Services.AddressService;
+global using BlazorECommerce.Server.Services.ProductTypeService;
 
 namespace BlazorECommerce
 {
@@ -39,6 +40,8 @@ namespace BlazorECommerce
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IAddressService, AddressService>();
+            builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
