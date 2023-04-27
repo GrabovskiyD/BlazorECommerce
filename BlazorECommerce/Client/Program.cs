@@ -1,15 +1,16 @@
-global using BlazorECommerce.Shared.Model;
-global using System.Net.Http.Json;
-global using BlazorECommerce.Client.Services.ProductService;
-global using BlazorECommerce.Client.Services.CategoryService;
-global using BlazorECommerce.Client.Services.CartService;
-global using Blazored.LocalStorage;
-global using BlazorECommerce.Client.Services.AuthService;
-global using Microsoft.AspNetCore.Components.Authorization;
 global using BlazorECommerce.Client.Services.AddressService;
+global using BlazorECommerce.Client.Services.AuthService;
+global using BlazorECommerce.Client.Services.CartService;
+global using BlazorECommerce.Client.Services.CategoryService;
+global using BlazorECommerce.Client.Services.ProductService;
+global using BlazorECommerce.Client.Services.ProductTypeService;
+global using BlazorECommerce.Shared.Model;
+global using Blazored.LocalStorage;
+global using Microsoft.AspNetCore.Components.Authorization;
+global using System.Net.Http.Json;
+using BlazorECommerce.Client.Services.OrderService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using BlazorECommerce.Client.Services.OrderService;
 
 
 namespace BlazorECommerce.Client
@@ -30,6 +31,7 @@ namespace BlazorECommerce.Client
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IAddressService, AddressService>();
+            builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
