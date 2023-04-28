@@ -8,6 +8,7 @@
         {
             _dataContext = dataContext;
         }
+
         public async Task<ServiceResponse<List<ProductType>>> GetProductTypesAsync()
         {
             var productTypes = await _dataContext.ProductTypes.ToListAsync();

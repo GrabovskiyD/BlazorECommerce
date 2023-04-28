@@ -5,11 +5,11 @@ namespace BlazorECommerce.Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
-    public class ProductTypes : ControllerBase
+    public class ProductTypeController : ControllerBase
     {
         private readonly IProductTypeService _productTypeService;
 
-        public ProductTypes(IProductTypeService productTypeService)
+        public ProductTypeController(IProductTypeService productTypeService)
         {
             _productTypeService = productTypeService;
         }

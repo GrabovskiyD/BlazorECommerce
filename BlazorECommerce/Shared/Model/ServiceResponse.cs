@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlazorECommerce.Shared.Model
+﻿namespace BlazorECommerce.Shared.Model
 {
     public class ServiceResponse<T>
     {

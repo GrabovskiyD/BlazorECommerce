@@ -4,6 +4,6 @@
     {
         event Action OnChange;
         public List<ProductType> ProductTypes { get; set; }
-        Task GetProdyctTypesAsync();
+        Task GetProductTypesAsync();
     }
 }

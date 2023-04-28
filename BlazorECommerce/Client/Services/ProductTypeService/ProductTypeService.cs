@@ -1,4 +1,6 @@
-﻿namespace BlazorECommerce.Client.Services.ProductTypeService
+﻿using static System.Net.WebRequestMethods;
+
+namespace BlazorECommerce.Client.Services.ProductTypeService
 {
     public class ProductTypeService : IProductTypeService
     {
@@ -8,14 +10,15 @@
         {
             _httpClient = httpClient;
         }
-        public List<ProductType> ProductTypes { get; set; }
+        public List<ProductType> ProductTypes { get; set; } = new List<ProductType>();
 
         public event Action OnChange;
 
-        public async Task GetProdyctTypesAsync()
+        public async Task GetProductTypesAsync()
         {
-            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<ProductType>>>("/api/producttype");
-            ProductTypes = response.Data;
+            var result = await _httpClient
+                .GetFromJsonAsync<ServiceResponse<List<ProductType>>>("api/ProductType");
+            ProductTypes = result.Data;
         }
     }
 }
