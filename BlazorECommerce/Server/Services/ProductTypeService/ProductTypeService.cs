@@ -11,6 +11,7 @@
 
         public async Task<ServiceResponse<List<ProductType>>> AddProductTypesAsync(ProductType productType)
         {
+            productType.Editing = productType.IsNew = false;
             _dataContext.ProductTypes.Add(productType);
             await _dataContext.SaveChangesAsync();
 
