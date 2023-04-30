@@ -15,5 +15,11 @@
         Task<ServiceResponse<List<Product>>> GetFeaturedProductsAsync();
 
         Task<ServiceResponse<List<Product>>> GetAdminProductsAsync();
+
+        Task<ServiceResponse<Product>> CreateProductAsync(Product product);
+
+        Task<ServiceResponse<Product>> UpdateProductAsync(Product product);
+
+        Task<ServiceResponse<bool>> DeleteProductAsync(int productId);
     }
 }
