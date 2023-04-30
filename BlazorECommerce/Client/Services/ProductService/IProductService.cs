@@ -8,6 +8,7 @@
         int PageCount { get; set; }
         string LastSearchText { get; set; }
         List<Product> Products { get; set; }
+        List<Product> AdminProducts { get; set; }
 
         Task GetProducts(string? categoryUrl = null);
 
@@ -15,5 +16,6 @@
 
         Task SearchProducts(string searchText, int page);
         Task<List<string>> GetProductsSearchSuggestions(string searchText);
+        Task GetAdminProducts();
     }
 }
