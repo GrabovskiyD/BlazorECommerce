@@ -53,5 +53,23 @@ namespace BlazorECommerce.Server.Controllers
         {
             return Ok(await _productService.GetFeaturedProductsAsync());
         }
+
+        [HttpPost, Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<Product>>> CreateProductAsync(Product product)
+        {
+            return Ok(await _productService.CreateProductAsync(product));
+        }
+
+        [HttpPut, Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<Product>>> UpdateProductAsync(Product product)
+        {
+            return Ok(await _productService.UpdateProductAsync(product));
+        }
+
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProductAsync(int id)
+        {
+            return Ok(await _productService.DeleteProductAsync(id));
+        }
     }
 }

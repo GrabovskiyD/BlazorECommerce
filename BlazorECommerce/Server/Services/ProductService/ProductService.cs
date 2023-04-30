@@ -169,5 +169,88 @@
 
             return response;
         }
+
+        public async Task<ServiceResponse<Product>> CreateProductAsync(Product product)
+        {
+            foreach(var variant in product.Variants)
+            {
+                variant.ProductType = null;
+            }
+            _dataContext.Products.Add(product);
+            await _dataContext.SaveChangesAsync();
+            return new ServiceResponse<Product>
+            {
+                Data = product,
+                Success = true
+            };
+        }
+
+        public async Task<ServiceResponse<Product>> UpdateProductAsync(Product product)
+        {
+            var dbProduct = await _dataContext.Products.FindAsync(product.Id);
+            if (dbProduct is null)
+            {
+                return new ServiceResponse<Product>
+                {
+                    Success = false,
+                    Message = "Product not found."
+                };
+            }
+
+            dbProduct.Title = product.Title;
+            dbProduct.Description = product.Description;
+            dbProduct.ImageUrl = product.ImageUrl;
+            dbProduct.CategoryId = product.CategoryId;
+            dbProduct.Visible = product.Visible;
+
+            foreach(var variant in product.Variants)
+            {
+                var dbVariant = await _dataContext
+                    .ProductVariants
+                    .SingleOrDefaultAsync(v => v.ProductId == variant.ProductId &&
+                    v.ProductTypeId == variant.ProductTypeId);
+                if(dbVariant is null)
+                {
+                    variant.ProductType = null;
+                    _dataContext.ProductVariants.Add(variant);
+                }
+                else
+                {
+                    dbVariant.ProductTypeId = variant.ProductTypeId;
+                    dbVariant.Price = variant.Price;
+                    dbVariant.OriginalPrice = variant.OriginalPrice;
+                    dbVariant.Visible = variant.Visible;
+                    dbVariant.Deleted = variant.Deleted;
+                }
+            }
+
+            await _dataContext.SaveChangesAsync();
+            return new ServiceResponse<Product>
+            {
+                Data = product
+            };
+        }
+
+        public async Task<ServiceResponse<bool>> DeleteProductAsync(int productId)
+        {
+            var dbProduct = await _dataContext.Products.FindAsync(productId);
+            if(dbProduct is null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Product not found."
+                };
+            }
+
+            dbProduct.Deleted = true;
+            await _dataContext.SaveChangesAsync();
+            return new ServiceResponse<bool> 
+            {
+                Data = true, 
+                Success = true 
+            };  
+        }
     }
 }
