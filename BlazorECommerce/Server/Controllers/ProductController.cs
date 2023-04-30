@@ -1,4 +1,6 @@
-﻿namespace BlazorECommerce.Server.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace BlazorECommerce.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -8,6 +10,12 @@
         public ProductController(IProductService productService)
         {
             _productService = productService;
+        }
+
+        [HttpGet("admin"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetAdminProductAsync()
+        {
+            return Ok(await _productService.GetAdminProductsAsync());
         }
 
         [HttpGet]

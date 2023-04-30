@@ -13,5 +13,7 @@
         Task<ServiceResponse<List<string>>> GetProductSearchSuggestionsAsync(string searchText);
 
         Task<ServiceResponse<List<Product>>> GetFeaturedProductsAsync();
+
+        Task<ServiceResponse<List<Product>>> GetAdminProductsAsync();
     }
 }

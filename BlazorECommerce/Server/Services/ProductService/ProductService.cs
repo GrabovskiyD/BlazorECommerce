@@ -140,5 +140,19 @@
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<Product>>> GetAdminProductsAsync()
+        {
+            var response = new ServiceResponse<List<Product>>
+            {
+                Data = await _dataContext.Products
+                    .Where(p => !p.Deleted)
+                    .Include(p => p.Variants.Where(v => !v.Deleted))
+                    .ThenInclude(v => v.ProductType)
+                    .ToListAsync()
+            };
+
+            return response;
+        }
     }
 }
